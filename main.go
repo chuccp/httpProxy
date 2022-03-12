@@ -1,34 +1,24 @@
 package main
 
 import (
-	"github.com/chuccp/utils/io"
-	"github.com/chuccp/utils/log"
-	"strings"
-	"time"
+	"github.com/chuccp/httpProxy/net"
+	"github.com/chuccp/httpProxy/proxy"
 )
 
 func main() {
-	tcp:=io.NewTCPServer(8080)
-	err:=tcp.Bind()
-	if err==nil{
-		go func() {
-			stream,err:=tcp.Accept()
-			if err==nil{
-				for{
-					data,err:=stream.ReadLine()
-					if err==nil{
-						query:=string(data)
-						index:=strings.IndexByte(string(data),' ')
-						protocol:=query[:index]
-						log.Info("protocol",protocol)
-					}
-				}
-			}else{
-				log.Info(err)
+	tcp := net.NewTCPServer(8080)
+	err := tcp.Bind()
+	if err == nil {
+		for {
+			stream, err1 := tcp.Accept()
+			if err1 == nil {
+				conn := proxy.NewConn(stream)
+				go conn.Handle()
+			} else {
+				panic(err1)
 			}
-		}()
+		}
+	} else {
+		panic(err)
 	}
-
-	time.Sleep(time.Hour)
-
 }

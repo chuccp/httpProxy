@@ -16,6 +16,12 @@ github.com/cheekybits/genny v1.0.0 h1:uGGa4nei+j20rOSeDeP5Of12XVm7TGUd4dJA9RDitf
 github.com/cheekybits/genny v1.0.0/go.mod h1:+tQajlRqAUrPI7DOSpB0XAqZYtQakVtB7wXkRAgjxjQ=
 github.com/chuccp/utils v0.0.0-20220308123224-f4a37fc832d1 h1:7B23vRdx5Uw5zF1qf7winulOJFSaVDJnFV5aJ0MmHKY=
 github.com/chuccp/utils v0.0.0-20220308123224-f4a37fc832d1/go.mod h1:asDeXPJRvX61clbB05Q/8UQN0A7bw/y9t3zkXlBdbrw=
+github.com/chuccp/utils v0.0.0-20220311143819-1181cbe8071c h1:odTeNE8uGyrCfPH2hjE8Bx0cR+NLnwFknp8pBpa07Ro=
+github.com/chuccp/utils v0.0.0-20220311143819-1181cbe8071c/go.mod h1:cvBiWfCmHacnOh53DtErKRpKHHO6Rff0oahSrBg06nw=
+github.com/chuccp/utils v0.0.0-20220311151935-06c3a0ba8540 h1:dl2xiC72quBuemlAQNI0acAEqf2NVP319J4irmQYJac=
+github.com/chuccp/utils v0.0.0-20220311151935-06c3a0ba8540/go.mod h1:JMQWValfxYN3wfycpINFweHbjtSJj8+Lfjt53FFqN1E=
+github.com/chuccp/utils v0.0.0-20220312042833-6d2322dad35f h1:Xi/jkGNCF7GbERxM3q8N6t2xeHBNqFxtEvFyILOx9F0=
+github.com/chuccp/utils v0.0.0-20220312042833-6d2322dad35f/go.mod h1:JMQWValfxYN3wfycpINFweHbjtSJj8+Lfjt53FFqN1E=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/coreos/go-systemd v0.0.0-20181012123002-c6f51f82210d/go.mod h1:F5haX7vjVVG0kc13fIWeqUViNPyEJxv/OmvnBo0Yme4=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
