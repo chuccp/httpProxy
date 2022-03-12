@@ -126,7 +126,10 @@ func (s *Stream) Proxy() error {
 			return err1
 		}
 		if strings.HasPrefix(s.header.url,"/") {
-			s.requestHttp()
+			err4:=s.requestHttp()
+			if err4!=nil{
+				return err4
+			}
 		}else{
 			if s.header.method == CONNECT {
 				return s.HandleConnect()
