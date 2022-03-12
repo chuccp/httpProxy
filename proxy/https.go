@@ -1,22 +1,28 @@
 package proxy
 
 import (
+	"bytes"
 	"github.com/chuccp/httpProxy/net"
 	net2 "net"
+	"strings"
 )
 
-type Https struct {
+type Http struct {
 	local  *net.NetStream
 	header *Header
 	remote *net.NetStream
 }
 
-func NewHttps(stream *net.NetStream,header *Header) *Https {
-	return &Https{local: stream, header: header}
+func NewHttp(stream *net.NetStream,header *Header) *Http {
+	return &Http{local: stream, header: header}
 }
 
-func (h *Https) Conn() (err error) {
-	address, err := net2.ResolveTCPAddr("tcp", h.header.header["Host"])
+func (h *Http) Conn() (err error) {
+	host := h.header.header["Host"]
+	if strings.Index(host,":")<0{
+		host = host+":80"
+	}
+	address, err := net2.ResolveTCPAddr("tcp", host)
 	if err != nil {
 		return err
 	}
@@ -27,7 +33,21 @@ func (h *Https) Conn() (err error) {
 	}
 	return nil
 }
-func (h *Https) Start() {
+
+func (h *Http)replayOK()error{
+	_, err6 := h.local.WriteAndFlush([]byte("HTTP/1.1 200 Connection Established\r\n\r\n"))
+	return err6
+}
+
+func (h *Http)writeHeader()error{
+	var buff = new(bytes.Buffer)
+	h.header.Bytes(buff)
+	_, err6 := h.remote.WriteAndFlush(buff.Bytes())
+	return err6
+}
+
+
+func (h *Http) Start() {
 	h.remote.ReadFunc(func(data []byte) bool {
 		_, err2 := h.local.WriteAndFlush(data)
 		if err2 == nil {

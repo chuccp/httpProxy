@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"errors"
 	"github.com/chuccp/httpProxy/net"
-	"github.com/chuccp/utils/log"
 	"strings"
 )
 
@@ -66,16 +65,45 @@ func (s *Stream) ParseHeader() error {
 		if len(data) == 0 {
 			break
 		} else {
-			log.Info(string(data))
 			kv := strings.SplitN(string(data), ":", 2)
 			if len(kv) == 2 {
 				s.header.header[strings.TrimSpace(kv[0])] = strings.TrimSpace(kv[1])
 			}
 		}
 	}
-
 	return nil
 }
+func (s *Stream)HandleConnect()error{
+	https := NewHttp(s.stream, s.header)
+	err3 := https.Conn()
+	if err3 == nil {
+		err6 := https.replayOK()
+		if err6 != nil {
+			return err6
+		} else {
+			https.Start()
+		}
+	} else {
+		return err3
+	}
+	return nil
+}
+func (s *Stream)HandleHttp()error{
+	https := NewHttp(s.stream, s.header)
+	err3 := https.Conn()
+	if err3 == nil {
+		err6 := https.writeHeader()
+		if err6 != nil {
+			return err6
+		} else {
+			https.Start()
+		}
+	} else {
+		return err3
+	}
+	return nil
+}
+
 func (s *Stream) Proxy() error {
 	err := s.ParseQueryUrl()
 	if err != nil {
@@ -86,26 +114,9 @@ func (s *Stream) Proxy() error {
 		return err1
 	}
 	if s.header.method == CONNECT {
-		https := NewHttps(s.stream, s.header)
-		err3 := https.Conn()
-		if err3 == nil {
-			_, err6 := s.stream.WriteAndFlush([]byte("HTTP/1.1 200 Connection Established\r\n\r\n"))
-			if err6 != nil {
-				return err6
-			} else {
-				https.Start()
-			}
-		} else {
-			return err3
-		}
+		return s.HandleConnect()
 	} else {
-		http := NewHttp(s.stream, s.header)
-		err3 := http.Conn()
-		if err3 == nil {
-			http.Start()
-		} else {
-			log.Info("!!!!", err3)
-		}
+		return s.HandleHttp()
 	}
 
 	return nil
