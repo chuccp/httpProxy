@@ -1,0 +1,10 @@
+{
+  "name": "cokeV2ray",
+  "description": "cokeV2ray",
+  "env": {
+    "GOVERSION":{
+      "description": "go语言编译版本，不要修改",
+      "value": "1.17"
+    }
+  }
+}
