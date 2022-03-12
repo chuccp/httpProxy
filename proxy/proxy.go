@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"github.com/chuccp/utils/io"
+	"strconv"
 	"strings"
 )
 
@@ -73,7 +74,7 @@ func (s *Stream) ParseHeader() error {
 	}
 	return nil
 }
-func (s *Stream)HandleConnect()error{
+func (s *Stream) HandleConnect() error {
 	https := NewHttp(s.stream, s.header)
 	err3 := https.Conn()
 	if err3 == nil {
@@ -88,7 +89,7 @@ func (s *Stream)HandleConnect()error{
 	}
 	return nil
 }
-func (s *Stream)HandleHttp()error{
+func (s *Stream) HandleHttp() error {
 	https := NewHttp(s.stream, s.header)
 	err3 := https.Conn()
 	if err3 == nil {
@@ -103,21 +104,37 @@ func (s *Stream)HandleHttp()error{
 	}
 	return nil
 }
-
+func (s *Stream) requestHttp() error{
+	var buff = new(bytes.Buffer)
+	data:=[]byte("hello："+s.header.url)
+	buff.WriteString("HTTP/1.1 200 OK\r\n")
+	buff.WriteString("Content-Type: text/html; charset=UTF-8\r\n")
+	buff.WriteString("Content-Length: "+strconv.Itoa(len(data))+"\r\n")
+	buff.WriteString("\r\n")
+	buff.Write(data)
+	_,e:=s.stream.WriteAndFlush(buff.Bytes())
+	return e
+}
 func (s *Stream) Proxy() error {
-	err := s.ParseQueryUrl()
-	if err != nil {
-		return err
+	for{
+		err := s.ParseQueryUrl()
+		if err != nil {
+			return err
+		}
+		err1 := s.ParseHeader()
+		if err1 != nil {
+			return err1
+		}
+		if strings.HasPrefix(s.header.url,"/") {
+			s.requestHttp()
+		}else{
+			if s.header.method == CONNECT {
+				return s.HandleConnect()
+			} else {
+				return s.HandleHttp()
+			}
+			break
+		}
 	}
-	err1 := s.ParseHeader()
-	if err1 != nil {
-		return err1
-	}
-	if s.header.method == CONNECT {
-		return s.HandleConnect()
-	} else {
-		return s.HandleHttp()
-	}
-
 	return nil
 }
