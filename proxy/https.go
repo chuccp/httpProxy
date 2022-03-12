@@ -2,18 +2,18 @@ package proxy
 
 import (
 	"bytes"
-	"github.com/chuccp/httpProxy/net"
+	"github.com/chuccp/utils/io"
 	net2 "net"
 	"strings"
 )
 
 type Http struct {
-	local  *net.NetStream
+	local  *io.NetStream
 	header *Header
-	remote *net.NetStream
+	remote *io.NetStream
 }
 
-func NewHttp(stream *net.NetStream,header *Header) *Http {
+func NewHttp(stream *io.NetStream,header *Header) *Http {
 	return &Http{local: stream, header: header}
 }
 
@@ -26,7 +26,7 @@ func (h *Http) Conn() (err error) {
 	if err != nil {
 		return err
 	}
-	client := net.NewXConn(address.IP.String(), address.Port)
+	client := io.NewXConn(address.IP.String(), address.Port)
 	h.remote, err = client.Create()
 	if err != nil {
 		return err

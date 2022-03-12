@@ -3,7 +3,7 @@ package proxy
 import (
 	"bytes"
 	"errors"
-	"github.com/chuccp/httpProxy/net"
+	"github.com/chuccp/utils/io"
 	"strings"
 )
 
@@ -34,10 +34,10 @@ func (h *Header) Bytes(buff *bytes.Buffer) {
 
 type Stream struct {
 	header *Header
-	stream *net.NetStream
+	stream *io.NetStream
 }
 
-func NewStream(stream *net.NetStream) *Stream {
+func NewStream(stream *io.NetStream) *Stream {
 	return &Stream{stream: stream, header: newHeader()}
 }
 func (s *Stream) ParseQueryUrl() error {

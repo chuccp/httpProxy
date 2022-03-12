@@ -1,12 +1,19 @@
 package main
 
 import (
-	"github.com/chuccp/httpProxy/net"
 	"github.com/chuccp/httpProxy/proxy"
+	"github.com/chuccp/utils/io"
+	"os"
+	"strconv"
 )
 
 func main() {
-	tcp := net.NewTCPServer(8080)
+	export := os.Getenv("PORT")
+	if export ==""{
+		export = "8080"
+	}
+	port,_:=strconv.Atoi(export)
+	tcp := io.NewTCPServer(port)
 	err := tcp.Bind()
 	if err == nil {
 		for {

@@ -1,15 +1,15 @@
 package proxy
 
 import (
-	"github.com/chuccp/httpProxy/net"
+	"github.com/chuccp/utils/io"
 )
 
 
 type Conn struct {
-	stream *net.NetStream
+	stream *io.NetStream
 }
 
-func NewConn(stream *net.NetStream) *Conn {
+func NewConn(stream *io.NetStream) *Conn {
 	return &Conn{stream: stream}
 }
 func (c *Conn) Handle()  {
