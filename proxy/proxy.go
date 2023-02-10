@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"github.com/chuccp/utils/io"
+	"log"
 	"strconv"
 	"strings"
 )
@@ -48,6 +49,7 @@ func (s *Stream) ParseQueryUrl() error {
 	}
 	query := string(data)
 	queryUrl := strings.Split(query, " ")
+	log.Print(queryUrl)
 	if len(queryUrl) == 3 {
 		s.header.method = queryUrl[0]
 		s.header.url = queryUrl[1]
